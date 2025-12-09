@@ -1,7 +1,8 @@
-import { apiLogin } from "next-firebase-auth-edge/api"; //
+// TRICK: Point directly to the file to bypass export map issues
+import { apiLogin } from "next-firebase-auth-edge/lib/next/api";
 import { NextResponse } from "next/server";
 
-export const runtime = "edge"; // Runs fast on the Edge
+export const runtime = "edge";
 
 export async function GET(request) {
   return apiLogin(request, {
