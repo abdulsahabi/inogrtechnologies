@@ -25,7 +25,7 @@ export default function AdminLayout({ children }) {
               <Menu size={24} />
             </button>
 
-            <h2 className="text-sm font-medium text-gray-500 dark:text-zinc-400 flex items-center gap-2">
+            <h2 className=" md:ml-4 text-sm font-medium text-gray-500 dark:text-zinc-400 flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
               Enterprise Portal
             </h2>
@@ -40,7 +40,7 @@ export default function AdminLayout({ children }) {
         </header>
 
         {/* Page Content */}
-        <main className="p-4 md:p-8">{children}</main>
+        <main className="p-4 md:p-8 md:ml-5">{children}</main>
       </div>
     </div>
   );

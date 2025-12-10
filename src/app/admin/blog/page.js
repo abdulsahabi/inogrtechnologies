@@ -170,7 +170,7 @@ export default function AdminBlogPage() {
               <th className="px-6 py-4 font-medium">Article</th>
               <th className="px-6 py-4 font-medium">Category</th>
               <th className="px-6 py-4 font-medium">Date</th>
-              <th className="px-6 py-4 font-medium">Stats</th>
+
               <th className="px-6 py-4 font-medium text-right">Actions</th>
             </tr>
           </thead>
@@ -234,12 +234,7 @@ export default function AdminBlogPage() {
                   <td className="px-6 py-4 text-gray-500 dark:text-zinc-400">
                     {post.displayDate}
                   </td>
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-1.5 text-gray-500 dark:text-zinc-400">
-                      <Eye size={14} />
-                      <span>{post.views || 0}</span>
-                    </div>
-                  </td>
+
                   <td className="px-6 py-4 text-right">
                     <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                       <a

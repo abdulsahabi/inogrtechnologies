@@ -3,22 +3,32 @@
 import React, { useState } from "react";
 import { Send, CheckCircle2, Loader2, Sparkles, Mail } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { subscribeNewsletter } from "@/app/actions/newsletter"; // Import the action
 
 export default function Newsletter() {
   const [email, setEmail] = useState("");
-  const [status, setStatus] = useState("idle"); // idle | loading | success
+  const [status, setStatus] = useState("idle"); // idle | loading | success | error
   const [interests, setInterests] = useState(["tech"]);
+  const [message, setMessage] = useState(""); // To show error/success messages
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!email) return;
-    setStatus("loading");
 
-    // Simulate API
-    setTimeout(() => {
+    setStatus("loading");
+    setMessage("");
+
+    const result = await subscribeNewsletter(email, interests);
+
+    if (result.success) {
       setStatus("success");
       setEmail("");
-    }, 1500);
+    } else {
+      setStatus("error"); // You might want to handle error state visually
+      setMessage(result.message);
+      // Optional: Reset to idle after a few seconds so they can try again
+      setTimeout(() => setStatus("idle"), 3000);
+    }
   };
 
   const toggleInterest = (interest) => {
@@ -103,7 +113,7 @@ export default function Newsletter() {
                 </div>
               </div>
 
-              {/* 2. The Form / Success State (CSS Animation instead of JS) */}
+              {/* 2. The Form / Success State */}
               <div className="relative min-h-[140px] flex flex-col justify-center">
                 {status === "success" ? (
                   <div className="animate-in fade-in zoom-in duration-300 flex flex-col items-center justify-center text-center space-y-3">
@@ -144,6 +154,13 @@ export default function Newsletter() {
                         className="w-full bg-zinc-900/80 border border-zinc-700 text-white pl-10 pr-4 py-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary placeholder:text-zinc-600 transition-all"
                       />
                     </div>
+
+                    {/* Error Message Display */}
+                    {status === "error" && (
+                      <p className="text-red-400 text-xs text-center">
+                        {message}
+                      </p>
+                    )}
 
                     <button
                       type="submit"

@@ -15,6 +15,8 @@ import {
   Sun,
   User,
   MessageSquare,
+  Briefcase,
+  Mail,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTheme } from "next-themes";
@@ -31,6 +33,8 @@ const ADMIN_LINKS = [
   },
   { name: "User Management", href: "/admin/users", icon: Users },
   { name: "Blog Posts", href: "/admin/blog", icon: FileText },
+  { name: "Portfolio", href: "/admin/portfolio", icon: Briefcase },
+  { name: "Newsletter", href: "/admin/newsletter", icon: Mail },
   { name: "My Profile", href: "/admin/profile", icon: User },
 ];
 

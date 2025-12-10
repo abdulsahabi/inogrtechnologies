@@ -20,7 +20,11 @@ import {
   TrendingUp,
   Briefcase,
   GraduationCap,
-  Users, // Imported for generic team icon
+  Users,
+  Layers, // New Icon for Portfolio
+  Laptop, // New Icon
+  Smartphone as PhoneIcon, // Alias to avoid conflict
+  PenTool as DesignIcon, // Alias
 } from "lucide-react";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { cn } from "@/lib/utils";
@@ -29,6 +33,8 @@ import { motion, AnimatePresence } from "framer-motion";
 // --- CONFIGURATION ---
 const navConfig = [
   { name: "Home", href: "/", type: "link" },
+
+  // --- SERVICES ---
   {
     name: "Software Solutions",
     href: "/software",
@@ -97,6 +103,41 @@ const navConfig = [
       },
     ],
   },
+
+  // --- NEW: PORTFOLIO SECTION ---
+  {
+    name: "Portfolio",
+    href: "/portfolio",
+    type: "dropdown",
+    items: [
+      {
+        title: "All Projects",
+        href: "/portfolio",
+        icon: Layers,
+        desc: "View our full case studies",
+      },
+      {
+        title: "Web Apps",
+        href: "/portfolio?category=Web Development",
+        icon: Laptop,
+        desc: "Dashboards & Platforms",
+      },
+      {
+        title: "Mobile Apps",
+        href: "/portfolio?category=Mobile App",
+        icon: PhoneIcon,
+        desc: "iOS & Android Builds",
+      },
+      {
+        title: "Branding",
+        href: "/portfolio?category=Graphic Design",
+        icon: DesignIcon,
+        desc: "Logos & Identity",
+      },
+    ],
+  },
+
+  // --- BLOG ---
   {
     name: "Blog",
     href: "/blog",
@@ -128,7 +169,8 @@ const navConfig = [
       },
     ],
   },
-  // --- UPDATED ABOUT SECTION (With Team Images) ---
+
+  // --- ABOUT (Team Images) ---
   {
     name: "About",
     href: "/about",
@@ -140,7 +182,6 @@ const navConfig = [
         icon: Users,
         desc: "Vision & Philosophy",
       },
-      // TEAM MEMBERS (Using 'image' instead of 'icon')
       {
         title: "Abdulrahaman",
         href: "/about",
@@ -214,7 +255,7 @@ export default function Navbar() {
                 />
               </div>
               <span className="text-xl font-bold tracking-tight text-black dark:text-white">
-                <span className="text-primary">Technologies</span>
+                Ino<span className="text-primary">Gr</span>
               </span>
             </Link>
 
@@ -345,7 +386,7 @@ export default function Navbar() {
                   />
                 </div>
                 <span className="text-xl font-bold tracking-tight text-black dark:text-white">
-                  <span className="text-primary">Technologies</span>
+                  Ino<span className="text-primary">Gr</span>
                 </span>
               </Link>
               <button
