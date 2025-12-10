@@ -61,7 +61,7 @@ export default function SoftwarePage() {
   return (
     <main className="min-h-screen bg-white dark:bg-black">
       {/* HERO: Clean, Fast, No Heavy Images */}
-      <section className="pt-32 pb-12 px-4 md:px-6 border-b border-gray-100 dark:border-zinc-800">
+      <section className="pt-6 pb-12 px-4 md:px-6 border-b border-gray-100 dark:border-zinc-800">
         <div className="container max-w-5xl mx-auto">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-xs font-bold uppercase tracking-wider mb-6 text-zinc-600 dark:text-zinc-400">
             <Terminal size={12} />

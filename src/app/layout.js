@@ -7,54 +7,54 @@ import GoogleAnalytics from "@/components/analytics/google-analytics";
 
 const inter = Inter({ subsets: ["latin"] });
 
-// 1. VIEWPORT CONFIGURATION (Separate export in Next.js 14+)
-// This ensures your brand colors show up in the browser bar on mobile
-export const viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)", color: "#000000" },
-  ],
-  width: "device-width",
-  initialScale: 1,
-  maximumScale: 5,
-};
-
-// 2. DETAILED METADATA
+// --- 1. ENTERPRISE METADATA ---
 export const metadata = {
-  // CRITICAL: This fixes social sharing images. Change .com to .ng if needed.
-  metadataBase: new URL("https://inogrtechnologies.com.ng"),
-
+  metadataBase: new URL("https://www.inogrtechnologies.com.ng"),
   title: {
     default: "InoGr Technologies | Enterprise Software & Digital Hub in Kebbi",
-    template: "%s | InoGr Technologies", // Auto-adds brand name to other pages
+    template: "%s | InoGr Technologies",
+  },
+  description:
+    "InoGr Technologies is Kebbi State's premier tech hub. We provide custom software development (Web, Mobile, AI), professional branding, and essential digital services for students and businesses.",
+  keywords: [
+    // Software
+    "Software Development Kebbi",
+    "Web Development Nigeria",
+    "Mobile App Development",
+    "AI & Machine Learning Solutions",
+    "UI/UX Design Agency",
+    "Backend System Architecture",
+    // Cafe & Local
+    "Digital Hub Birnin Kebbi",
+    "Printing Services Kebbi",
+    "CAC Registration Nigeria",
+    "POS & Telecom Services",
+    "Tech Training Northern Nigeria",
+    "Federal University Birnin Kebbi Tech",
+  ],
+  authors: [{ name: "InoGr Team" }],
+  creator: "InoGr Technologies",
+  publisher: "InoGr Technologies",
+  verification: {
+    google: "uXSGVuv_uWNRWPgiQL-bCpniQyabPbBwT5jKeiY6x5U", // <--- Paste the code from Step 1 here
   },
 
-  description:
-    "The premier technology company in Birnin Kebbi. We build enterprise-grade software (Web, Mobile, AI) and provide essential business services (CAC Registration, Branding, Printing) for students and startups.",
-
-  applicationName: "InoGr Technologies",
-
-  // KEYWORDS: Mix of high-tech and local services for maximum reach
-  keywords: [
-    "Software Development Kebbi",
-    "Web Design Nigeria",
-    "Mobile App Developer",
-    "AI Solutions Northern Nigeria",
-    "CAC Registration Birnin Kebbi",
-    "Student Project Printing",
-    "POS Services Kebbi",
-    "Tech Hub Birnin Kebbi",
-    "InoGr Technologies",
-    "InoGr Cafe",
-  ],
-
-  authors: [
-    { name: "Abdulrahaman Sahabi", url: "https://inogrtechnologies.com.ng" },
-  ],
-  creator: "InoGr Technologies Team",
-  publisher: "InoGr Technologies",
-
-  // ROBOTS: Tells Google to index everything
+  openGraph: {
+    type: "website",
+    locale: "en_NG",
+    url: "https://www.inogrtechnologies.com.ng",
+    siteName: "InoGr Technologies",
+    title: "InoGr Technologies | Building the Digital Future of Kebbi",
+    description: "Expert Software Solutions & Premium Digital Services.",
+    images: [
+      {
+        url: "/logo.jpeg",
+        width: 800,
+        height: 600,
+        alt: "InoGr Technologies Logo",
+      },
+    ],
+  },
   robots: {
     index: true,
     follow: true,
@@ -66,63 +66,178 @@ export const metadata = {
       "max-snippet": -1,
     },
   },
-
-  // OPEN GRAPH (For Facebook, LinkedIn, WhatsApp links)
-  openGraph: {
-    type: "website",
-    locale: "en_NG", // Targeting Nigeria
-    url: "https://inogrtechnologies.com.ng",
-    title: "InoGr Technologies | Innovation meets Accessibility",
-    description:
-      "Bridging the gap between global tech innovation and local accessibility in Kebbi State.",
-    siteName: "InoGr Technologies",
-    images: [
-      {
-        url: "/logo.jpeg", // We use your logo as the sharing image
-        width: 800,
-        height: 600,
-        alt: "InoGr Technologies Logo",
-      },
-    ],
-  },
-
-  // TWITTER CARD (For X/Twitter)
-  twitter: {
-    card: "summary_large_image",
-    title: "InoGr Technologies",
-    description: "Enterprise Software & Digital Hub in Kebbi State.",
-    images: ["/logo.jpeg"], // Re-use logo
-    creator: "@inogrtech", // Replace with your actual handle if you have one
-  },
-
-  // ICONS (Favicon)
   icons: {
-    icon: "/logo.jpeg",
-    shortcut: "/logo.jpeg",
-    apple: "/logo.jpeg",
-  },
-
-  // LOCAL SEO (Helps you show up on Google Maps/Local Search)
-  category: "technology",
-  classification: "Software Company & Business Center",
-
-  // VERIFICATION (You will need to add your codes here later)
-  verification: {
-    google: "google-site-verification=YOUR_CODE_HERE", // Add this when you launch
-  },
-
-  // GEOTAGGING (Crucial for "Near Me" searches in Kebbi)
-  other: {
-    "geo.region": "NG-KE", // Nigeria - Kebbi
-    "geo.placename": "Birnin Kebbi",
-    "geo.position": "12.45;4.19", // Approx Lat/Long for Birnin Kebbi
-    ICBM: "12.45, 4.19",
+    icon: "/favicon.ico",
   },
 };
 
 export default function RootLayout({ children }) {
-  // Access the variable safely
   const gaId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
+
+  // --- 2. ENTERPRISE SCHEMA (JSON-LD) ---
+  // This maps exactly to your Nav Config services
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      // A. ORGANIZATION IDENTITY
+      {
+        "@type": "Organization",
+        "@id": "https://www.inogrtechnologies.com.ng/#organization",
+        name: "InoGr Technologies",
+        url: "https://www.inogrtechnologies.com.ng",
+        logo: "https://www.inogrtechnologies.com.ng/logo.jpeg",
+        email: "inogrworks@gmail.com",
+        telephone: "+234-811-754-8994",
+        address: {
+          "@type": "PostalAddress",
+          streetAddress: "Students' Area, Take-off site, Federal University",
+          addressLocality: "Birnin Kebbi",
+          addressRegion: "Kebbi State",
+          addressCountry: "NG",
+        },
+        sameAs: [
+          "https://facebook.com/inogrtechnologies",
+          "https://twitter.com/inogrtech",
+          "https://linkedin.com/company/inogrtechnologies",
+          "https://instagram.com/inogrtech",
+        ],
+      },
+
+      // B. LOCAL BUSINESS (The Hub/Cafe)
+      {
+        "@type": "LocalBusiness",
+        parentOrganization: {
+          "@id": "https://www.inogrtechnologies.com.ng/#organization",
+        },
+        name: "InoGr Digital Hub & Café",
+        image: "https://www.inogrtechnologies.com.ng/logo.jpeg",
+        telephone: "+234-811-754-8994",
+        priceRange: "₦₦",
+        address: {
+          "@type": "PostalAddress",
+          streetAddress: "Students' Area, Take-off site, Federal University",
+          addressLocality: "Birnin Kebbi",
+          addressRegion: "Kebbi State",
+          addressCountry: "NG",
+        },
+        geo: {
+          "@type": "GeoCoordinates",
+          latitude: 12.45,
+          longitude: 4.19,
+        },
+        openingHoursSpecification: [
+          {
+            "@type": "OpeningHoursSpecification",
+            dayOfWeek: [
+              "Monday",
+              "Tuesday",
+              "Wednesday",
+              "Thursday",
+              "Friday",
+              "Saturday",
+            ],
+            opens: "08:00",
+            closes: "22:00",
+          },
+        ],
+      },
+
+      // C. SERVICE CATALOG (Software Solutions)
+      {
+        "@type": "Service",
+        serviceType: "Software Engineering",
+        provider: {
+          "@id": "https://www.inogrtechnologies.com.ng/#organization",
+        },
+        areaServed: { "@type": "Country", name: "Nigeria" },
+        hasOfferCatalog: {
+          "@type": "OfferCatalog",
+          name: "Software Solutions",
+          itemListElement: [
+            {
+              "@type": "Offer",
+              itemOffered: {
+                "@type": "Service",
+                name: "Custom Web Development (SaaS, Portals)",
+              },
+            },
+            {
+              "@type": "Offer",
+              itemOffered: {
+                "@type": "Service",
+                name: "Mobile App Development (iOS & Android)",
+              },
+            },
+            {
+              "@type": "Offer",
+              itemOffered: {
+                "@type": "Service",
+                name: "Artificial Intelligence & Machine Learning Integration",
+              },
+            },
+            {
+              "@type": "Offer",
+              itemOffered: {
+                "@type": "Service",
+                name: "UI/UX Design & Prototyping",
+              },
+            },
+            {
+              "@type": "Offer",
+              itemOffered: {
+                "@type": "Service",
+                name: "Backend API & Database Architecture",
+              },
+            },
+          ],
+        },
+      },
+
+      // D. SERVICE CATALOG (Café Services)
+      {
+        "@type": "Service",
+        serviceType: "Digital Services",
+        provider: {
+          "@id": "https://www.inogrtechnologies.com.ng/#organization",
+        },
+        areaServed: { "@type": "City", name: "Birnin Kebbi" },
+        hasOfferCatalog: {
+          "@type": "OfferCatalog",
+          name: "Café Services",
+          itemListElement: [
+            {
+              "@type": "Offer",
+              itemOffered: {
+                "@type": "Service",
+                name: "Professional Printing & Documentation",
+              },
+            },
+            {
+              "@type": "Offer",
+              itemOffered: {
+                "@type": "Service",
+                name: "Corporate Branding & Graphic Design",
+              },
+            },
+            {
+              "@type": "Offer",
+              itemOffered: {
+                "@type": "Service",
+                name: "Online Registration Services (CAC, JAMB, NIN)",
+              },
+            },
+            {
+              "@type": "Offer",
+              itemOffered: {
+                "@type": "Service",
+                name: "POS & Telecom Services (Data, Airtime)",
+              },
+            },
+          ],
+        },
+      },
+    ],
+  };
 
   return (
     <html lang="en" suppressHydrationWarning>
@@ -133,12 +248,17 @@ export default function RootLayout({ children }) {
           enableSystem
           disableTransitionOnChange
         >
-          {/* Smart Analytics (Only runs if accepted) */}
-          <GoogleAnalytics GA_MEASUREMENT_ID={gaId} />
+          {gaId && <GoogleAnalytics GA_MEASUREMENT_ID={gaId} />}
 
           <Navbar />
-          {children}
 
+          {/* Inject JSON-LD Schema */}
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          />
+
+          {children}
           <CookieConsent />
         </ThemeProvider>
       </body>

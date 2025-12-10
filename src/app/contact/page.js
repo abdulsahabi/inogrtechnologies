@@ -59,7 +59,7 @@ export default function ContactPage() {
   return (
     <main className="min-h-screen bg-white dark:bg-black">
       {/* HEADER */}
-      <section className="pt-10 pb-10 px-4 md:px-6 border-b border-gray-100 dark:border-zinc-900">
+      <section className="pt-6 pb-10 px-4 md:px-6 border-b border-gray-100 dark:border-zinc-900">
         <div className="container max-w-5xl mx-auto text-center md:text-left">
           <motion.h1
             initial={{ opacity: 0, y: 10 }}
@@ -82,7 +82,7 @@ export default function ContactPage() {
           <div className="space-y-10">
             {/* WHATSAPP CARD */}
             <a
-              href="https://wa.me/2349071455425?text=Hello%20InoGr,%20I%20would%20like%20to%20inquire%20about..."
+              href="https://wa.me/2348117548994?text=Hello%20InoGr,%20I%20would%20like%20to%20inquire%20about..."
               target="_blank"
               rel="noopener noreferrer"
               className="group flex items-center gap-4 p-5 rounded-2xl bg-[#25D366]/5 border border-[#25D366]/20 hover:bg-[#25D366]/10 transition-all cursor-pointer"
@@ -111,8 +111,8 @@ export default function ContactPage() {
               <ContactItem
                 icon={Phone}
                 label="Call Us"
-                value="+234 907 145 5425"
-                link="tel:+2349071455425"
+                value="+234 811 754 8994"
+                link="tel:+2348117548994"
               />
               <ContactItem
                 icon={MapPin}

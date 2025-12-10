@@ -90,7 +90,7 @@ export default function BlogClient({ initialPosts = [] }) {
   return (
     <>
       {/* HEADER SECTION */}
-      <section className="pt-32 pb-12 px-4 md:px-6 border-b border-gray-100 dark:border-zinc-900">
+      <section className="pt-6 pb-12 px-4 md:px-6 border-b border-gray-100 dark:border-zinc-900">
         <div className="container max-w-5xl mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-end gap-8">
             <div className="max-w-2xl">
