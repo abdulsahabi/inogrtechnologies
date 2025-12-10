@@ -30,12 +30,23 @@ const DATA = {
       "Global CDN & Edge Caching Integration",
     ],
     tech: [
-      "Next.js 14",
+      "PHP",
+      "Laravel",
+      "MySQL",
+      "Node.js",
+      "Express.js",
+      "Next.js 16",
       "React",
       "TypeScript",
       "Tailwind CSS",
       "PostgreSQL",
       "Redis",
+      "Shared Hosting",
+      "TanStack Query", // Added for state/data management
+      "Shadcn/UI", // Added for accessible component systems
+      "Playwright", // Added for E2E testing
+      "Vercel", // Added for deployment
+      "Zod", // Added for schema validation
     ],
   },
   mobile: {
@@ -53,10 +64,20 @@ const DATA = {
     ],
     tech: [
       "React Native",
+      "Flutter",
+      "TypeScript",
+      "Redux Toolkit",
+      "GraphQL",
+
       "Expo Application Services",
       "Firebase Suite",
       "SQLite/Realm",
       "NativeWind",
+      "React Navigation", // Added for routing
+      "Fastlane", // Added for deployment automation
+      "Detox", // Added for grey-box testing
+      "Swift/Kotlin", // Added for custom native modules
+      "Tamagui", // Added for high-performance UI
     ],
   },
   ai: {
@@ -79,6 +100,11 @@ const DATA = {
       "TensorFlow",
       "Pinecone",
       "Hugging Face",
+      "PyTorch", // Added for deep learning framework
+      "LlamaIndex", // Added specifically for RAG data ingestion
+      "Anthropic Claude", // Added as alternative LLM
+      "Pandas/NumPy", // Added for data manipulation
+      "Scikit-learn", // Added for traditional ML algorithms
     ],
   },
   design: {
@@ -94,7 +120,17 @@ const DATA = {
       "A/B Testing & Usability Audits",
       "Motion Design & Micro-interactions",
     ],
-    tech: ["Figma", "Adobe XD", "Framer", "Lottie", "Storybook"],
+    tech: [
+      "Figma",
+      "Adobe XD",
+      "Framer",
+      "Lottie",
+      "Storybook",
+      "Miro", // Added for whiteboarding/flows
+      "Adobe After Effects", // Added for advanced motion design
+      "Maze", // Added for user testing
+      "Zeplin", // Added for developer handoff
+    ],
   },
   backend: {
     title: "Cloud Infrastructure & Backend",
@@ -116,6 +152,11 @@ const DATA = {
       "AWS (Lambda/S3)",
       "Docker",
       "Kubernetes",
+      "Terraform", // Added for Infrastructure as Code
+      "Kafka", // Added for event streaming
+      "Prisma", // Added for ORM
+      "GraphQL", // Added for flexible API queries
+      "Datadog", // Added for monitoring/logging
     ],
   },
 };

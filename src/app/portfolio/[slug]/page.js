@@ -44,7 +44,7 @@ export default async function ProjectPage({ params }) {
   return (
     <main className="min-h-screen bg-white dark:bg-black">
       {/* --- HERO SECTION --- */}
-      <section className="relative pt-40 pb-20 px-4 md:px-6 overflow-hidden">
+      <section className="relative pt-10 pb-20 px-4 md:px-6 overflow-hidden">
         {/* Background Image (Blurred) */}
         <div className="absolute inset-0 z-0">
           {project.image?.startsWith("bg-") ? (
