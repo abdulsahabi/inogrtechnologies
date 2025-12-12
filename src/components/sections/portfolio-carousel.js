@@ -10,6 +10,13 @@ import {
   ArrowRight,
 } from "lucide-react";
 
+// --- HELPER: STRIP HTML TAGS ---
+const stripHtml = (html) => {
+  if (!html) return "";
+  // Simple regex strip is sufficient for card previews
+  return html.replace(/<[^>]*>?/gm, "");
+};
+
 export default function PortfolioCarousel({ projects }) {
   const scrollRef = useRef(null);
 
@@ -78,18 +85,22 @@ export default function PortfolioCarousel({ projects }) {
                   {project.title}
                 </h3>
 
+                {/* FIX: STRIP HTML TAGS HERE */}
                 <p className="text-sm text-gray-500 dark:text-zinc-400 leading-relaxed mb-6 line-clamp-2">
-                  {project.desc}
+                  {stripHtml(project.desc)}
                 </p>
 
                 {/* Tech Stack */}
                 <div className="mt-auto flex flex-wrap gap-2">
-                  {project.tags?.map((t) => (
+                  {(Array.isArray(project.tags)
+                    ? project.tags
+                    : (project.tags || "").split(",")
+                  ).map((t) => (
                     <span
                       key={t}
                       className="px-2.5 py-1 rounded-md bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 text-[10px] font-bold text-gray-600 dark:text-zinc-300"
                     >
-                      {t}
+                      {t.trim()}
                     </span>
                   ))}
                 </div>

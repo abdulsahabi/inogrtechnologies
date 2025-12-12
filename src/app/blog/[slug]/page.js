@@ -13,15 +13,18 @@ import {
 import Footer from "@/components/layout/footer";
 import { getPublicPostBySlug } from "../actions";
 
-// 1. IMPORT QUILL STYLES (Crucial for matching the Editor)
+// 1. IMPORT QUILL STYLES (Crucial for rendering the rich text)
 import "react-quill-new/dist/quill.snow.css";
 
-// 2. GENERATE METADATA
+// 2. GENERATE METADATA (Dynamic OpenGraph Image)
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   const post = await getPublicPostBySlug(slug);
 
   if (!post) return { title: "Post Not Found" };
+
+  // Use post image if it's a real URL, otherwise fallback to logo
+  const ogImage = post.image?.startsWith("http") ? post.image : "/logo.jpeg";
 
   return {
     title: post.title,
@@ -31,11 +34,18 @@ export async function generateMetadata({ params }) {
       description: post.excerpt,
       images: [
         {
-          url: "/logo.jpeg",
-          width: 800,
-          height: 600,
+          url: ogImage,
+          width: 1200, // Standard social card width
+          height: 630, // Standard social card height
+          alt: post.title,
         },
       ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.excerpt,
+      images: [ogImage],
     },
   };
 }
@@ -51,7 +61,7 @@ export default async function BlogPost({ params }) {
     <main className="min-h-screen bg-white dark:bg-black">
       <article>
         {/* HERO HEADER */}
-        <header className="pt-6 pb-12 px-4 md:px-6 border-b border-gray-100 dark:border-zinc-900 bg-gray-50/50 dark:bg-zinc-900/20">
+        <header className="pt-32 pb-12 px-5 md:px-6 border-b border-gray-100 dark:border-zinc-900 bg-gray-50/50 dark:bg-zinc-900/20">
           <div className="container max-w-3xl mx-auto">
             <Link
               href="/blog"
@@ -82,13 +92,14 @@ export default async function BlogPost({ params }) {
         </header>
 
         {/* CONTENT AREA */}
-        <div className="container max-w-5xl mx-auto px-4 md:px-6 py-12 md:py-20">
+        {/* Layout: max-w-4xl for optimal reading width. Tighter mobile padding (px-5, py-8). */}
+        <div className="container max-w-4xl mx-auto px-5 md:px-6 py-8 md:py-20">
           <div className="grid md:grid-cols-4 gap-12">
-            {/* MAIN TEXT */}
+            {/* MAIN TEXT COLUMN */}
             <div className="md:col-span-3">
               {/* Featured Image */}
               <div
-                className={`w-full aspect-video rounded-3xl mb-12  overflow-hidden relative ${
+                className={`w-full aspect-video rounded-3xl mb-12 shadow-sm overflow-hidden relative ${
                   post.image?.startsWith("bg-") ? post.image : "bg-gray-100"
                 }`}
               >
@@ -102,20 +113,20 @@ export default async function BlogPost({ params }) {
                 )}
               </div>
 
-              {/* THE FIX:
-                  1. ql-snow: Wraps it to enable theme styles.
-                  2. ql-editor: Applies your 'globals.css' custom styles (headers, quotes, code).
-                  3. !p-0 !h-auto: Overrides the input-field padding/height so it looks like a blog post.
+              {/* RICH TEXT CONTENT */}
+              {/* ql-snow: Enables the theme container.
+                  ql-editor: Applies our custom 'globals.css' typography (Serif font, spacing).
+                  !p-0 !h-auto: Overrides default editor padding/height constraints.
               */}
               <div className="ql-snow">
                 <div
-                  className="ql-editor !p-0 !h-auto !min-h-0 text-lg text-gray-800 dark:text-gray-300 leading-relaxed font-sans"
+                  className="ql-editor !p-0 !h-auto !min-h-0"
                   dangerouslySetInnerHTML={{ __html: post.content }}
                 />
               </div>
             </div>
 
-            {/* SIDEBAR */}
+            {/* SIDEBAR (Sticky) */}
             <div className="md:col-span-1 space-y-8 md:sticky md:top-32 h-fit">
               <div className="p-6 rounded-2xl bg-gray-50 dark:bg-zinc-900 border border-gray-100 dark:border-zinc-800">
                 <h4 className="text-xs font-bold uppercase tracking-wider text-gray-400 mb-4 flex items-center gap-2">

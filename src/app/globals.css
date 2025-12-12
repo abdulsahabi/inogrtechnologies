@@ -58,20 +58,39 @@
   z-index: 40;
 }
 
-/* 2. Editor Area */
+/* 2. Editor Area Container */
 .ql-container {
   border: none !important;
-  font-size: 16px;
-  font-family: inherit; /* Use your app's font */
   min-height: 400px; /* Taller default height */
 }
 
+/* 3. TYPOGRAPHY & SPACING (Editorial Design) */
 .ql-editor {
-  padding: 1.5rem 1.5rem 4rem 1.5rem !important; /* Extra bottom padding for mobile scrolling */
-  line-height: 1.75;
+  /* Use the Serif font defined in layout.js */
+  font-family: var(--font-serif), ui-serif, Georgia, Cambria, "Times New Roman",
+    Times, serif;
+  color: #1f2937; /* Gray-800 for better readability than pure black */
+  padding: 0 !important; /* Container handles padding now for better mobile control */
+
+  /* Mobile First Sizing */
+  font-size: 1.05rem;
+  line-height: 1.7;
 }
 
-/* 3. Dark Mode Adaptation */
+/* Desktop Typography adjustments */
+@media (min-width: 768px) {
+  .ql-editor {
+    font-size: 1.125rem; /* 18px */
+    line-height: 1.8;
+  }
+}
+
+/* Dark Mode Text */
+.dark .ql-editor {
+  color: #d1d5db; /* Gray-300 */
+}
+
+/* 4. Dark Mode Adaptation for Toolbar */
 .dark .ql-toolbar {
   border-bottom: 1px solid #27272a !important;
   background: #18181b;
@@ -87,39 +106,68 @@
   color: #a1a1aa !important;
 }
 
-/* Dark Mode Dropdowns */
 .dark .ql-picker-options {
   background-color: #18181b !important;
   border: 1px solid #27272a !important;
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
 }
 
-/* 4. Content Styling Inside Editor */
+/* 5. Content Styling Inside Editor */
+
+/* Headings: Use Sans-Serif for contrast against Serif body */
 .ql-editor h2 {
-  font-size: 1.875rem;
+  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  font-size: 1.75rem; /* Mobile H2 */
   font-weight: 800;
-  margin-top: 1.5em;
-  margin-bottom: 0.5em;
+  margin-top: 2em;
+  margin-bottom: 0.75em;
+  color: #111827;
+  line-height: 1.2;
 }
+
+@media (min-width: 768px) {
+  .ql-editor h2 {
+    font-size: 2.25rem;
+  } /* Desktop H2 */
+}
+
 .ql-editor h3 {
+  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   font-size: 1.5rem;
   font-weight: 700;
   margin-top: 1.5em;
   margin-bottom: 0.5em;
 }
+
+.dark .ql-editor h2,
+.dark .ql-editor h3 {
+  color: #ffffff;
+}
+
 .ql-editor p {
   margin-bottom: 1em;
 }
+
+/* Lists */
 .ql-editor ul,
 .ql-editor ol {
-  padding-left: 1.5em;
-  margin-bottom: 1em;
+  padding-left: 1.2em; /* Tighter indent on mobile */
+  margin-bottom: 1.5em;
 }
+.ql-editor li {
+  margin-bottom: 0.5em;
+  padding-left: 0.5em;
+}
+
+/* Blockquotes */
 .ql-editor blockquote {
   border-left: 4px solid #3b82f6;
   padding-left: 1rem;
+  margin: 2rem 0;
   font-style: italic;
-  color: #6b7280;
+  font-size: 1.2em;
+  color: #4b5563;
+  background: transparent;
 }
 .dark .ql-editor blockquote {
   color: #9ca3af;
@@ -132,4 +180,6 @@
   border-radius: 0.5rem;
   padding: 1rem;
   overflow-x: auto; /* Scroll horizontally on mobile */
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
 }

@@ -1,4 +1,4 @@
-import { Inter } from "next/font/google";
+import { Inter, Merriweather } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/layout/navbar";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -6,6 +6,12 @@ import CookieConsent from "@/components/ui/cookie-consent";
 import GoogleAnalytics from "@/components/analytics/google-analytics";
 
 const inter = Inter({ subsets: ["latin"] });
+// Configure the Serif Font
+const merriweather = Merriweather({
+  subsets: ["latin"],
+  weight: ["300", "400", "700", "900"],
+  variable: "--font-serif", // We will use this variable in CSS
+});
 
 // --- 1. ENTERPRISE METADATA ---
 export const metadata = {
@@ -241,7 +247,7 @@ export default function RootLayout({ children }) {
 
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
+      <body className={`${inter.className} ${merriweather.variable}`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
