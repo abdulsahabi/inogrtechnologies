@@ -6,8 +6,6 @@ import Newsletter from "@/components/sections/newsletter";
 import BlogPreview from "@/components/sections/blog-preview";
 import Footer from "@/components/layout/footer";
 
-export const revalidate = 3600; // Cache for 1 hour (3600 seconds)
-
 export default function Home() {
   return (
     <main className="flex min-h-screen flex-col bg-white dark:bg-black">

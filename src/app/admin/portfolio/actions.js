@@ -2,6 +2,7 @@
 
 import { adminDb } from "@/lib/firebase-admin-server";
 import { revalidatePath } from "next/cache";
+import { deleteImageFromSupabase } from "@/lib/supabase-delete"; // <--- NEW IMPORT
 
 // --- HELPER: SERIALIZE FIRESTORE DATA ---
 const serializeData = (data) => ({
@@ -10,13 +11,19 @@ const serializeData = (data) => ({
 });
 
 // 1. CREATE PROJECT
-export async function createProject(prevState, formData) {
+// Updated signature to accept formData directly as the first argument
+export async function createProject(formData) {
   const title = formData.get("title");
   const category = formData.get("category"); // Web, Mobile, Design
-  const desc = formData.get("desc");
+  const desc = formData.get("desc"); // HTML Content from Rich Text Editor
   const year = formData.get("year");
-  const image = formData.get("image"); // URL from Supabase
+  const image = formData.get("image"); // URL from Cloudinary
   const tagsString = formData.get("tags"); // "Next.js, React, Maps"
+
+  // Basic Validation
+  if (!title || !desc || !image) {
+    return { success: false, message: "Missing required fields." };
+  }
 
   // Convert comma-separated string to array
   const tags = tagsString
@@ -26,18 +33,21 @@ export async function createProject(prevState, formData) {
         .filter((t) => t)
     : [];
 
-  // Auto-generate slug
-  const slug = title
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
+  // Auto-generate slug (e.g., "Kebbi Health Portal" -> "kebbi-health-portal")
+  const slug =
+    title
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "") +
+    "-" +
+    Math.floor(Math.random() * 1000); // Add randomness to ensure uniqueness
 
   try {
     await adminDb.collection("projects").doc(slug).set({
       slug,
       title,
       category,
-      desc,
+      desc, // This is now Rich Text HTML
       year,
       image,
       tags,
@@ -48,11 +58,12 @@ export async function createProject(prevState, formData) {
     revalidatePath("/admin/portfolio");
     return { success: true };
   } catch (error) {
+    console.error("Create Project Error:", error);
     return { success: false, message: error.message };
   }
 }
 
-// 2. GET PROJECTS (Fixed Serialization)
+// 2. GET PROJECTS (For Admin Dashboard)
 export async function getAdminProjects() {
   try {
     const snapshot = await adminDb
@@ -64,7 +75,7 @@ export async function getAdminProjects() {
 
     return snapshot.docs.map((doc) => ({
       id: doc.id,
-      ...serializeData(doc.data()), // <--- Now safe for Client Components
+      ...serializeData(doc.data()),
     }));
   } catch (error) {
     console.error("Portfolio Fetch Error:", error);
@@ -75,11 +86,28 @@ export async function getAdminProjects() {
 // 3. DELETE PROJECT
 export async function deleteProject(slug) {
   try {
-    await adminDb.collection("projects").doc(slug).delete();
+    const docRef = adminDb.collection("projects").doc(slug);
+    const docSnap = await docRef.get();
+
+    if (!docSnap.exists) {
+      return { success: false, message: "Project not found." };
+    }
+
+    const projectData = docSnap.data();
+
+    // Delete Image from Supabase
+    if (projectData.image && projectData.image.startsWith("http")) {
+      await deleteImageFromSupabase(projectData.image);
+    }
+
+    await docRef.delete();
+
     revalidatePath("/portfolio");
     revalidatePath("/admin/portfolio");
+
     return { success: true };
   } catch (error) {
-    return { success: false, message: "Failed to delete." };
+    console.error("Delete Error:", error);
+    return { success: false, message: "Failed to delete project." };
   }
 }

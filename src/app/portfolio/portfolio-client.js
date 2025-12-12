@@ -3,12 +3,26 @@
 import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { ArrowUpRight, Layers, ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const CATEGORIES = ["All", "Web Development", "Mobile App", "Graphic Design"];
 const ITEMS_PER_PAGE = 6;
+
+// --- HELPER: STRIP HTML TAGS ---
+// This turns "<p><strong>Hello</strong> world</p>" into "Hello world"
+const stripHtml = (html) => {
+  if (!html) return "";
+  // Create a temporary DOM element to extract text (Browser only)
+  if (typeof window !== "undefined") {
+    const tmp = document.createElement("DIV");
+    tmp.innerHTML = html;
+    return tmp.textContent || tmp.innerText || "";
+  }
+  // Fallback for Server/Initial Render (Regex strip)
+  return html.replace(/<[^>]*>?/gm, "");
+};
 
 export default function PortfolioClient({ initialProjects }) {
   const searchParams = useSearchParams();
@@ -223,17 +237,22 @@ export default function PortfolioClient({ initialProjects }) {
                             </div>
                           </div>
 
+                          {/* FIXED: STRIP HTML TAGS FOR PREVIEW */}
                           <p className="text-sm md:text-base text-gray-500 dark:text-zinc-400 leading-relaxed mb-6 line-clamp-2">
-                            {project.desc}
+                            {stripHtml(project.desc)}
                           </p>
 
+                          {/* TAGS HANDLING */}
                           <div className="flex flex-wrap gap-2">
-                            {project.tags?.map((t) => (
+                            {(Array.isArray(project.tags)
+                              ? project.tags
+                              : (project.tags || "").split(",")
+                            ).map((t) => (
                               <span
                                 key={t}
                                 className="px-3 py-1.5 rounded-lg bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-700 text-xs font-semibold text-gray-600 dark:text-zinc-300"
                               >
-                                {t}
+                                {t.trim()}
                               </span>
                             ))}
                           </div>

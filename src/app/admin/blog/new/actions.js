@@ -2,64 +2,66 @@
 
 import { adminDb } from "@/lib/firebase-admin-server";
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 
+// --- HELPER: Calculate Read Time ---
 function calculateReadTime(content) {
   const wordsPerMinute = 200;
-  const words = content.trim().split(/\s+/).length;
-  const time = Math.ceil(words / wordsPerMinute);
-  return `${time} min read`;
+  const text = content.replace(/<[^>]*>?/gm, "");
+  const words = text.trim().split(/\s+/).length;
+  const minutes = Math.ceil(words / wordsPerMinute);
+  return `${minutes} min read`;
 }
 
-function formatDate(date) {
-  return date.toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-  });
+// --- HELPER: Create URL-Friendly Slug ---
+function createSlug(title) {
+  return (
+    title
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "") +
+    "-" +
+    Math.floor(Math.random() * 1000)
+  );
 }
 
-function generateSlug(title) {
-  return title
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-") // Replace non-alphanumeric chars with hyphens
-    .replace(/^-+|-+$/g, ""); // Remove leading/trailing hyphens
-}
-
-export async function createPost(prevState, formData) {
+// 1. CREATE POST ACTION
+export async function createPost(formData) {
   const title = formData.get("title");
-  const category = formData.get("category");
   const excerpt = formData.get("excerpt");
+  const category = formData.get("category");
   const content = formData.get("content");
-  // For now, we select a random gradient if no image URL is provided
-  const image =
-    formData.get("image") || "bg-gradient-to-br from-zinc-800 to-black";
+  const image = formData.get("image");
 
-  const slug = generateSlug(title);
-  const date = formatDate(new Date());
-  const readTime = calculateReadTime(content);
+  if (!title || !content) {
+    return { success: false, message: "Title and Content are required." };
+  }
 
   try {
-    // Save to Firestore 'posts' collection
-    // We use .set() with the slug as the ID so URL matches ID
+    const slug = createSlug(title);
+    const readTime = calculateReadTime(content);
+
+    const dateOptions = { month: "short", day: "numeric", year: "numeric" };
+    const dateDisplay = new Date().toLocaleDateString("en-US", dateOptions);
+
     await adminDb.collection("posts").doc(slug).set({
       slug,
       title,
-      category,
       excerpt,
-      date, // "Dec 6, 2025"
-      readTime, // "5 min read"
+      category,
+      content,
       image,
+      readTime,
+      date: dateDisplay,
+      createdAt: new Date(),
+      updatedAt: new Date(),
       views: 0,
-      content, // HTML String
-      createdAt: new Date(), // For sorting
       status: "Published",
     });
 
     revalidatePath("/blog");
     revalidatePath("/admin/blog");
 
-    return { success: true };
+    return { success: true, message: "Post published successfully!" };
   } catch (error) {
     console.error("Create Post Error:", error);
     return { success: false, message: error.message };

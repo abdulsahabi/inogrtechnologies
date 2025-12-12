@@ -36,20 +36,9 @@ export async function middleware(request) {
     },
     // --- DEBUGGING SECTION ---
     handleValidToken: async ({ token, decodedToken }, headers) => {
-      // LOG THE TOKEN TO CONSOLE
-      console.log("----------------------------------------------");
-      console.log("🔐 Middleware verified user:", decodedToken.email);
-      console.log(
-        "📜 Custom Claims:",
-        decodedToken.admin ? "HAS ADMIN" : "NO ADMIN",
-        decodedToken
-      );
-      console.log("----------------------------------------------");
-
       if (request.nextUrl.pathname.startsWith("/admin")) {
         // If 'admin' is missing or false, this triggers
         if (!decodedToken.admin) {
-          console.log("⛔ ACCESS DENIED: User is not admin");
           return NextResponse.redirect(new URL("/unauthorized", request.url));
         }
       }

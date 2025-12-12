@@ -13,9 +13,12 @@ import {
 import Footer from "@/components/layout/footer";
 import { getPublicPostBySlug } from "../actions";
 
-// 1. GENERATE METADATA FOR SEO
+// 1. IMPORT QUILL STYLES (Crucial for matching the Editor)
+import "react-quill-new/dist/quill.snow.css";
+
+// 2. GENERATE METADATA
 export async function generateMetadata({ params }) {
-  const { slug } = await params; // <--- FIX 1: Await params
+  const { slug } = await params;
   const post = await getPublicPostBySlug(slug);
 
   if (!post) return { title: "Post Not Found" };
@@ -38,8 +41,8 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function BlogPost({ params }) {
-  // 2. FETCH DATA ON SERVER
-  const { slug } = await params; // <--- FIX 2: Await params here too
+  // 3. FETCH DATA
+  const { slug } = await params;
   const post = await getPublicPostBySlug(slug);
 
   if (!post) return notFound();
@@ -48,7 +51,7 @@ export default async function BlogPost({ params }) {
     <main className="min-h-screen bg-white dark:bg-black">
       <article>
         {/* HERO HEADER */}
-        <header className="pt-32 pb-12 px-4 md:px-6 border-b border-gray-100 dark:border-zinc-900 bg-gray-50/50 dark:bg-zinc-900/20">
+        <header className="pt-6 pb-12 px-4 md:px-6 border-b border-gray-100 dark:border-zinc-900 bg-gray-50/50 dark:bg-zinc-900/20">
           <div className="container max-w-3xl mx-auto">
             <Link
               href="/blog"
@@ -83,6 +86,7 @@ export default async function BlogPost({ params }) {
           <div className="grid md:grid-cols-4 gap-12">
             {/* MAIN TEXT */}
             <div className="md:col-span-3">
+              {/* Featured Image */}
               <div
                 className={`w-full aspect-video rounded-3xl mb-12 shadow-2xl overflow-hidden relative ${
                   post.image?.startsWith("bg-") ? post.image : "bg-gray-100"
@@ -98,13 +102,17 @@ export default async function BlogPost({ params }) {
                 )}
               </div>
 
-              <div
-                className="prose prose-lg dark:prose-invert max-w-none 
-                prose-headings:font-bold prose-headings:text-gray-900 dark:prose-headings:text-white 
-                prose-p:text-gray-600 dark:prose-p:text-gray-300 prose-p:leading-relaxed 
-                prose-a:text-primary hover:prose-a:underline"
-                dangerouslySetInnerHTML={{ __html: post.content }}
-              />
+              {/* THE FIX:
+                  1. ql-snow: Wraps it to enable theme styles.
+                  2. ql-editor: Applies your 'globals.css' custom styles (headers, quotes, code).
+                  3. !p-0 !h-auto: Overrides the input-field padding/height so it looks like a blog post.
+              */}
+              <div className="ql-snow">
+                <div
+                  className="ql-editor !p-0 !h-auto !min-h-0 text-lg text-gray-800 dark:text-gray-300 leading-relaxed font-sans"
+                  dangerouslySetInnerHTML={{ __html: post.content }}
+                />
+              </div>
             </div>
 
             {/* SIDEBAR */}

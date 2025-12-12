@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createProject } from "../actions";
 import { uploadFile } from "../../upload-action";
+import RichTextEditor from "@/components/admin/rich-text-editor"; // <--- IMPORT EDITOR
 import {
   ArrowLeft,
   Save,
@@ -26,8 +27,13 @@ export default function NewProjectPage() {
   const [status, setStatus] = useState("idle"); // idle | compressing | uploading | saving | success
   const [imageFile, setImageFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState(null);
+
+  // Smart Tags State
   const [tags, setTags] = useState([]);
   const [tagInput, setTagInput] = useState("");
+
+  // Rich Text State (New)
+  const [desc, setDesc] = useState("");
 
   // --- SMART IMAGE HANDLER ---
   const handleImageChange = async (e) => {
@@ -91,10 +97,18 @@ export default function NewProjectPage() {
     e.preventDefault();
     if (status !== "idle") return; // Prevent double click
 
+    if (!desc.trim()) {
+      alert("Please write a project description.");
+      return;
+    }
+
     const formData = new FormData(e.target);
 
     // Inject our "Smart Tags" into the form data as a string
     formData.set("tags", tags.join(","));
+
+    // Inject Rich Text Content
+    formData.set("desc", desc);
 
     try {
       let imageUrl = "";
@@ -118,7 +132,7 @@ export default function NewProjectPage() {
       // 2. Saving Phase
       setStatus("saving");
       formData.set("image", imageUrl);
-      const result = await createProject(null, formData);
+      const result = await createProject(formData); // Removed 'null' argument if using server actions directly
 
       if (result.success) {
         setStatus("success");
@@ -133,24 +147,8 @@ export default function NewProjectPage() {
     }
   }
 
-  // Helper for Status Text
-  const getStatusText = () => {
-    switch (status) {
-      case "compressing":
-        return "Optimizing Image...";
-      case "uploading":
-        return "Uploading to CDN...";
-      case "saving":
-        return "Updating Database...";
-      case "success":
-        return "Project Live!";
-      default:
-        return "Publish Project";
-    }
-  };
-
   return (
-    <div className="max-w-3xl mx-auto pb-20 px-4 md:px-0">
+    <div className="max-w-4xl mx-auto pb-20 px-4 md:px-0">
       {/* Header */}
       <div className="flex items-center justify-between mb-8 pt-4">
         <button
@@ -196,6 +194,7 @@ export default function NewProjectPage() {
                   <option value="Mobile App">Mobile App</option>
                   <option value="Graphic Design">Graphic Design</option>
                 </select>
+                {/* Arrow Icon */}
                 <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
                   <svg
                     width="10"
@@ -228,18 +227,12 @@ export default function NewProjectPage() {
             </div>
           </div>
 
-          {/* Description */}
+          {/* RICH TEXT EDITOR (Replaced Textarea) */}
           <div className="space-y-2">
-            <label className="text-xs font-bold text-gray-500 dark:text-zinc-500 uppercase tracking-wider">
-              The Story (Description)
+            <label className="text-xs font-bold text-gray-500 dark:text-zinc-500 uppercase tracking-wider pl-1">
+              Case Study (Description)
             </label>
-            <textarea
-              name="desc"
-              required
-              rows={3}
-              placeholder="What problem did you solve?"
-              className="w-full bg-gray-50 dark:bg-black border border-gray-200 dark:border-zinc-800 rounded-xl px-4 py-3 text-sm text-gray-900 dark:text-white focus:border-primary outline-none resize-none leading-relaxed"
-            />
+            <RichTextEditor value={desc} onChange={setDesc} />
           </div>
 
           {/* Smart Tags Input */}
@@ -285,7 +278,7 @@ export default function NewProjectPage() {
                     removeTag(tags[tags.length - 1]);
                   }
                   if (e.key === "Enter") {
-                    e.preventDefault(); // Prevent form submit
+                    e.preventDefault();
                     if (tagInput.trim()) {
                       setTags([...tags, tagInput.trim()]);
                       setTagInput("");

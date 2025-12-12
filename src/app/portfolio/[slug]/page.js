@@ -1,18 +1,14 @@
 import React from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import {
-  ArrowLeft,
-  CheckCircle2,
-  Calendar,
-  Layers,
-  Cpu,
-  Globe,
-} from "lucide-react";
+import { ArrowLeft, Calendar, Layers, Cpu } from "lucide-react";
 import Footer from "@/components/layout/footer";
-import { getPublicProjectBySlug } from "../actions"; // <--- Import Server Action
+import { getPublicProjectBySlug } from "../actions";
 
-// 1. DYNAMIC METADATA (For SEO & Social Sharing)
+// 1. IMPORT QUILL STYLES (Crucial for rendering the rich text)
+import "react-quill-new/dist/quill.snow.css";
+
+// 2. DYNAMIC METADATA
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   const project = await getPublicProjectBySlug(slug);
@@ -21,13 +17,13 @@ export async function generateMetadata({ params }) {
 
   return {
     title: `${project.title} | Case Study`,
-    description: project.desc,
+    description: project.desc.replace(/<[^>]*>?/gm, "").substring(0, 160), // Strip HTML for SEO desc
     openGraph: {
       title: project.title,
-      description: project.desc,
+      description: project.desc.replace(/<[^>]*>?/gm, "").substring(0, 160),
       images: [
         {
-          url: project.image.startsWith("http") ? project.image : "/logo.jpeg",
+          url: project.image?.startsWith("http") ? project.image : "/logo.jpeg",
         },
       ],
     },
@@ -35,7 +31,7 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function ProjectPage({ params }) {
-  // 2. FETCH REAL DATA
+  // 3. FETCH REAL DATA
   const { slug } = await params;
   const project = await getPublicProjectBySlug(slug);
 
@@ -44,7 +40,7 @@ export default async function ProjectPage({ params }) {
   return (
     <main className="min-h-screen bg-white dark:bg-black">
       {/* --- HERO SECTION --- */}
-      <section className="relative pt-10 pb-20 px-4 md:px-6 overflow-hidden">
+      <section className="relative pt-6 pb-20 px-4 md:px-6 overflow-hidden">
         {/* Background Image (Blurred) */}
         <div className="absolute inset-0 z-0">
           {project.image?.startsWith("bg-") ? (
@@ -114,19 +110,21 @@ export default async function ProjectPage({ params }) {
       {/* --- CONTENT & DETAILS --- */}
       <section className="py-20 px-4 md:px-6">
         <div className="container max-w-5xl mx-auto grid md:grid-cols-3 gap-12">
-          {/* Main Content */}
+          {/* Main Content (RICH TEXT) */}
           <div className="md:col-span-2 space-y-10">
             <div>
               <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
                 The Overview
               </h3>
-              <p className="text-lg text-gray-600 dark:text-gray-300 leading-relaxed whitespace-pre-wrap">
-                {project.desc}
-              </p>
-            </div>
 
-            {/* Note: Since we only have 'desc' in DB, we display it simply. 
-                If you add 'challenge' or 'solution' fields to DB later, add sections here. */}
+              {/* THE FIX: Use Quill classes to render HTML correctly */}
+              <div className="ql-snow">
+                <div
+                  className="ql-editor !p-0 !h-auto !min-h-0 text-lg text-gray-600 dark:text-gray-300 leading-relaxed font-sans"
+                  dangerouslySetInnerHTML={{ __html: project.desc }}
+                />
+              </div>
+            </div>
           </div>
 
           {/* Sidebar Info */}
@@ -136,13 +134,18 @@ export default async function ProjectPage({ params }) {
               <h4 className="font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
                 <Cpu size={18} className="text-primary" /> Tech Stack
               </h4>
+
+              {/* Handle Tag String (e.g. "React,Firebase") or Array */}
               <div className="flex flex-wrap gap-2">
-                {project.tags?.map((t) => (
+                {(Array.isArray(project.tags)
+                  ? project.tags
+                  : (project.tags || "").split(",")
+                ).map((t) => (
                   <span
                     key={t}
                     className="px-3 py-1.5 bg-white dark:bg-black border border-gray-200 dark:border-zinc-700 rounded-lg text-xs font-bold text-gray-700 dark:text-gray-300 shadow-sm"
                   >
-                    {t}
+                    {t.trim()}
                   </span>
                 ))}
               </div>

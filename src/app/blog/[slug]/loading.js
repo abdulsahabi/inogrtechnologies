@@ -5,7 +5,7 @@ export default function LoadingPost() {
   return (
     <main className="min-h-screen bg-white dark:bg-black">
       {/* HEADER */}
-      <div className="pt-32 pb-12 px-4 md:px-6 border-b border-gray-100 dark:border-zinc-900">
+      <div className="pt-6 pb-12 px-4 md:px-6 border-b border-gray-100 dark:border-zinc-900">
         <div className="container max-w-3xl mx-auto">
           {/* Back Button */}
           <div className="h-4 w-24 bg-gray-200 dark:bg-zinc-800 rounded mb-8 animate-pulse" />

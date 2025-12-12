@@ -2,6 +2,7 @@
 
 import { adminDb } from "@/lib/firebase-admin-server";
 import { revalidatePath } from "next/cache";
+import { deleteImageFromSupabase } from "@/lib/supabase-delete"; // ✅ Correct Import
 
 // Helper to serialize Firestore data
 const serializeData = (data) => {
@@ -58,14 +59,33 @@ export async function getPostBySlug(slug) {
   }
 }
 
-// 3. DELETE POST
+// 2. DELETE POST ACTION (Fixed to match Portfolio)
 export async function deletePost(slug) {
   try {
-    await adminDb.collection("posts").doc(slug).delete();
-    revalidatePath("/admin/blog");
+    // A. Fetch document first
+    const docRef = adminDb.collection("posts").doc(slug);
+    const docSnap = await docRef.get();
+
+    if (!docSnap.exists) {
+      return { success: false, message: "Post not found." };
+    }
+
+    const postData = docSnap.data();
+
+    // B. Delete Image from Supabase
+    if (postData.image && postData.image.startsWith("http")) {
+      await deleteImageFromSupabase(postData.image);
+    }
+
+    // C. Delete Document
+    await docRef.delete();
+
     revalidatePath("/blog");
-    return { success: true, message: "Post deleted successfully." };
+    revalidatePath("/admin/blog");
+
+    return { success: true, message: "Post and image deleted." };
   } catch (error) {
+    console.error("Delete Error:", error);
     return { success: false, message: "Failed to delete post." };
   }
 }

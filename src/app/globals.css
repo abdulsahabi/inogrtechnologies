@@ -37,3 +37,99 @@
     transition-duration: 300ms;
   }
 }
+
+/* --- ENTERPRISE QUILL EDITOR STYLES --- */
+
+/* 1. Responsive Toolbar */
+.ql-toolbar {
+  border: none !important;
+  border-bottom: 1px solid #e5e7eb !important;
+  background: #f9fafb;
+
+  /* Flexbox Magic for Mobile */
+  display: flex !important;
+  flex-wrap: wrap !important; /* Wraps buttons to next line on small screens */
+  gap: 8px; /* Space between groups */
+  padding: 12px !important;
+
+  /* Sticky behavior for long posts */
+  position: sticky;
+  top: 0;
+  z-index: 40;
+}
+
+/* 2. Editor Area */
+.ql-container {
+  border: none !important;
+  font-size: 16px;
+  font-family: inherit; /* Use your app's font */
+  min-height: 400px; /* Taller default height */
+}
+
+.ql-editor {
+  padding: 1.5rem 1.5rem 4rem 1.5rem !important; /* Extra bottom padding for mobile scrolling */
+  line-height: 1.75;
+}
+
+/* 3. Dark Mode Adaptation */
+.dark .ql-toolbar {
+  border-bottom: 1px solid #27272a !important;
+  background: #18181b;
+}
+
+.dark .ql-stroke {
+  stroke: #a1a1aa !important;
+}
+.dark .ql-fill {
+  fill: #a1a1aa !important;
+}
+.dark .ql-picker {
+  color: #a1a1aa !important;
+}
+
+/* Dark Mode Dropdowns */
+.dark .ql-picker-options {
+  background-color: #18181b !important;
+  border: 1px solid #27272a !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+}
+
+/* 4. Content Styling Inside Editor */
+.ql-editor h2 {
+  font-size: 1.875rem;
+  font-weight: 800;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+}
+.ql-editor h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+}
+.ql-editor p {
+  margin-bottom: 1em;
+}
+.ql-editor ul,
+.ql-editor ol {
+  padding-left: 1.5em;
+  margin-bottom: 1em;
+}
+.ql-editor blockquote {
+  border-left: 4px solid #3b82f6;
+  padding-left: 1rem;
+  font-style: italic;
+  color: #6b7280;
+}
+.dark .ql-editor blockquote {
+  color: #9ca3af;
+}
+
+/* Code Block Styling */
+.ql-editor pre.ql-syntax {
+  background-color: #1e293b;
+  color: #e2e8f0;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  overflow-x: auto; /* Scroll horizontally on mobile */
+}
