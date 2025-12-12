@@ -90,26 +90,49 @@ export async function deletePost(slug) {
   }
 }
 
-// 4. UPDATE POST
+// 4. UPDATE POST (With Image Cleanup)
 export async function updatePost(slug, formData) {
   const title = formData.get("title");
   const category = formData.get("category");
   const excerpt = formData.get("excerpt");
   const content = formData.get("content");
-  const image = formData.get("image");
+  const newImage = formData.get("image");
 
   try {
-    await adminDb.collection("posts").doc(slug).update({
+    // A. Fetch current data to see what the OLD image was
+    const docRef = adminDb.collection("posts").doc(slug);
+    const docSnap = await docRef.get();
+
+    if (!docSnap.exists) {
+      return { success: false, message: "Post not found." };
+    }
+
+    const oldData = docSnap.data();
+    const oldImage = oldData.image;
+
+    // B. Detect if Image Changed
+    // If we have a new image URL, and it's different from the old one...
+    if (newImage && newImage !== oldImage) {
+      // ...and the old one was a real URL (not a gradient or empty)
+      if (oldImage && oldImage.startsWith("http")) {
+        console.log("🗑️ Image changed. Deleting old image...");
+        await deleteImageFromSupabase(oldImage);
+      }
+    }
+
+    // C. Update Database
+    await docRef.update({
       title,
       category,
       excerpt,
       content,
-      image,
-      updatedAt: new Date(), // Firestore handles Date objects on write, but not on read
+      image: newImage,
+      updatedAt: new Date(),
     });
 
     revalidatePath("/admin/blog");
     revalidatePath("/blog");
+
     return { success: true };
   } catch (error) {
     console.error("Update Error:", error);

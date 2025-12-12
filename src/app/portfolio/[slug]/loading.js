@@ -4,7 +4,7 @@ export default function Loading() {
   return (
     <main className="min-h-screen bg-white dark:bg-black animate-pulse">
       {/* --- HERO SKELETON --- */}
-      <section className="relative pt-32 pb-20 px-4 md:px-6 overflow-hidden">
+      <section className="relative pt-6 pb-20 px-4 md:px-6 overflow-hidden">
         <div className="container max-w-5xl mx-auto relative z-10">
           {/* Back Link Placeholder */}
           <div className="h-4 w-24 bg-gray-200 dark:bg-zinc-800 rounded mb-8" />

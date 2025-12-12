@@ -88,7 +88,7 @@ export default async function BlogPost({ params }) {
             <div className="md:col-span-3">
               {/* Featured Image */}
               <div
-                className={`w-full aspect-video rounded-3xl mb-12 shadow-2xl overflow-hidden relative ${
+                className={`w-full aspect-video rounded-3xl mb-12  overflow-hidden relative ${
                   post.image?.startsWith("bg-") ? post.image : "bg-gray-100"
                 }`}
               >
