@@ -61,7 +61,7 @@ export default async function BlogPost({ params }) {
     <main className="min-h-screen bg-white dark:bg-black">
       <article>
         {/* HERO HEADER */}
-        <header className="pt-32 pb-12 px-5 md:px-6 border-b border-gray-100 dark:border-zinc-900 bg-gray-50/50 dark:bg-zinc-900/20">
+        <header className="pt-6 pb-12 px-5 md:px-6 border-b border-gray-100 dark:border-zinc-900 bg-gray-50/50 dark:bg-zinc-900/20">
           <div className="container max-w-3xl mx-auto">
             <Link
               href="/blog"

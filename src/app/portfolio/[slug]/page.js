@@ -92,7 +92,7 @@ export default async function ProjectPage({ params }) {
       {/* --- SHOWCASE IMAGE --- */}
       <section className="px-4 md:px-6">
         <div className="container max-w-6xl mx-auto">
-          <div className="relative aspect-video w-full rounded-3xl overflow-hidden shadow-2xl border border-gray-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900">
+          <div className="relative h-full w-full rounded-3xl overflow-hidden border border-gray-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900">
             {project.image?.startsWith("bg-") ? (
               <div className={`absolute inset-0 ${project.image}`} />
             ) : (
